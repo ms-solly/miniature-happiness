@@ -1,6 +1,6 @@
 "use client";
 
-import { PublishPost } from "@/actions/post/create-post";
+import { CreatePost } from "@/actions/post/create-post";  // Correct import
 import {
   AlertDialog,
   AlertDialogContent,
@@ -22,15 +22,13 @@ const PostCreateButton = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [session, setSession] = useState<Session | null>(null);
 
-  // Check authentication and bookmark states
+  // Check authentication and session state
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
 
@@ -46,7 +44,7 @@ const PostCreateButton = () => {
         user_id: session?.user.id,
       };
 
-      const response = await createPost(post);
+      const response = await CreatePost(post);  // Correct function call
 
       if (response && response.id) {
         toast.success(protectedPostConfig.successCreate);
