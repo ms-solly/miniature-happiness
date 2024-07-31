@@ -25,7 +25,7 @@ export async function UpdatePost(context: z.infer<typeof postUpdateSchema>) {
       })
       .match({ id: post.id })
       .select()
-      .single();
+      
 
     if (error) {
       console.log(error);

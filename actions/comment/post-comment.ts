@@ -18,7 +18,7 @@ export async function PostComment(context: z.infer<typeof commentSchema>) {
         user_id: comment.userId,
         comment: comment.comment,
       })
-      .single();
+      
 
     if (error) {
       console.log(error);

@@ -43,6 +43,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
   const [session, setSession] = React.useState<Session | null>(null);
   const [showLoadingAlert, setShowLoadingAlert] = useState<boolean>(false);
 
+  
   // Check authentitication and bookmark states
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

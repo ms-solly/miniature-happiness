@@ -17,7 +17,7 @@ export async function AddBookmark(context: z.infer<typeof bookmarkSchema>) {
         id: bookmark.id,
         user_id: bookmark.user_id,
       })
-      .single();
+      
 
     if (error) {
       console.log(error);
