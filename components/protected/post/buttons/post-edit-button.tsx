@@ -1,7 +1,5 @@
-"use server";
-
 import { DeletePost } from "@/actions/post/delete-post";
-import { PublishPost } from "@/actions/post/publish-post";
+import { PublishPost } from "@/actions/post/create-post"; // Adjust the import path as needed
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,7 +26,7 @@ import {
   Trash as TrashIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import toast from "react-hot-toast";
 
 export const dynamic = "force-dynamic";
@@ -47,7 +45,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
   const [showLoadingAlert, setShowLoadingAlert] = useState<boolean>(false);
 
   // Check authentication and session state
-  useEffect(() => {
+  React.useEffect(() => {
     let isMounted = true;
 
     const fetchSession = async () => {
@@ -74,18 +72,27 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
   // Delete post
   const deleteMyPost = async () => {
     setIsDeleteLoading(true);
-    if (id && session?.user.id) {
-      const myPostData = {
-        id: id,
-        user_id: session.user.id,
-      };
-      const response = await DeletePost(myPostData);
-      if (response) {
-        toast.success(protectedPostConfig.successDelete);
-        router.refresh();
-      } else {
-        toast.error(protectedPostConfig.errorDelete);
-      }
+    if (!id) {
+      console.error("Post ID is undefined.");
+      toast.error(protectedPostConfig.errorDelete);
+      setIsDeleteLoading(false);
+      return;
+    }
+    if (!session?.user.id) {
+      console.error("User ID is undefined.");
+      toast.error(protectedPostConfig.errorDelete);
+      setIsDeleteLoading(false);
+      return;
+    }
+
+    const myPostData = {
+      id: id,
+      user_id: session.user.id,
+    };
+    const response = await DeletePost(myPostData);
+    if (response) {
+      toast.success(protectedPostConfig.successDelete);
+      router.refresh();
     } else {
       toast.error(protectedPostConfig.errorDelete);
     }
@@ -95,18 +102,27 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
   // Publish post
   const publishMyPost = async () => {
     setShowLoadingAlert(true);
-    if (id && session?.user.id) {
-      const myPostData = {
-        id: id,
-        published: true,
-      };
-      const response = await PublishPost(myPostData);
-      if (response) {
-        toast.success(protectedPostConfig.successPostPublished);
-        router.refresh();
-      } else {
-        toast.error(protectedPostConfig.errorUpdate);
-      }
+    if (!id) {
+      console.error("Post ID is undefined.");
+      toast.error(protectedPostConfig.errorUpdate);
+      setShowLoadingAlert(false);
+      return;
+    }
+    if (!session?.user.id) {
+      console.error("User ID is undefined.");
+      toast.error(protectedPostConfig.errorUpdate);
+      setShowLoadingAlert(false);
+      return;
+    }
+
+    const myPostData = {
+      id: id,
+      published: true,
+    };
+    const response = await PublishPost(myPostData);
+    if (response) {
+      toast.success(protectedPostConfig.successPostPublished);
+      router.refresh();
     } else {
       toast.error(protectedPostConfig.errorUpdate);
     }
