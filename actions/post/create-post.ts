@@ -6,7 +6,9 @@ import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { postPublishSchema } from "@/lib/validation/post";
 
-export async function PublishPost(context: z.infer<typeof postPublishSchema>) {
+
+
+export async function CreatePost(context: z.infer<typeof postPublishSchema>) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   try {
