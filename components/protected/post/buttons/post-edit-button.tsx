@@ -1,4 +1,7 @@
+"use server";
+
 import { DeletePost } from "@/actions/post/delete-post";
+import { PublishPost } from "@/actions/post/publish-post";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,7 +28,7 @@ import {
   Trash as TrashIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export const dynamic = "force-dynamic";
@@ -40,48 +43,57 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
   const router = useRouter();
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
-  const [session, setSession] = React.useState<Session | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [showLoadingAlert, setShowLoadingAlert] = useState<boolean>(false);
 
-  
-  // Check authentitication and bookmark states
-  React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+  // Check authentication and session state
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (isMounted) {
+        setSession(session);
+      }
+    };
+
+    fetchSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (isMounted) {
+        setSession(session);
+      }
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, [id, session?.user.id, supabase.auth]);
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  }, [id, supabase.auth]);
 
   // Delete post
-  async function deleteMyPost() {
+  const deleteMyPost = async () => {
     setIsDeleteLoading(true);
     if (id && session?.user.id) {
       const myPostData = {
         id: id,
-        user_id: session?.user.id,
+        user_id: session.user.id,
       };
       const response = await DeletePost(myPostData);
       if (response) {
-        setIsDeleteLoading(false);
         toast.success(protectedPostConfig.successDelete);
         router.refresh();
       } else {
-        setIsDeleteLoading(false);
         toast.error(protectedPostConfig.errorDelete);
       }
     } else {
-      setIsDeleteLoading(false);
       toast.error(protectedPostConfig.errorDelete);
     }
-  }
-  async function publishMyPost() {
+    setIsDeleteLoading(false);
+  };
+
+  // Publish post
+  const publishMyPost = async () => {
     setShowLoadingAlert(true);
     if (id && session?.user.id) {
       const myPostData = {
@@ -90,18 +102,17 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
       };
       const response = await PublishPost(myPostData);
       if (response) {
-        setShowLoadingAlert(false);
         toast.success(protectedPostConfig.successPostPublished);
         router.refresh();
       } else {
-        setShowLoadingAlert(false);
         toast.error(protectedPostConfig.errorUpdate);
       }
     } else {
-      setShowLoadingAlert(false);
       toast.error(protectedPostConfig.errorUpdate);
     }
-  }
+    setShowLoadingAlert(false);
+  };
+
   return (
     <>
       <DropdownMenu>
