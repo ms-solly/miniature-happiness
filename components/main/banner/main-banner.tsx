@@ -30,9 +30,9 @@ const MainBanner = () => {
           }}
         />
       </div>
-      <div className="mx-auto hidden w-full items-center justify-center gap-x-2 md:flex">
+      {/*  <div className="mx-auto hidden w-full items-center justify-center gap-x-2 md:flex">
         <p className="text-sm font-semibold leading-6 text-gray-900">
-          {mainBannerConfig.title}
+         {mainBannerConfig.title}
         </p>
         <p className="text-sm leading-6 text-gray-900">
           {mainBannerConfig.description}
@@ -46,6 +46,7 @@ const MainBanner = () => {
           {mainBannerConfig.button}
         </Link>
       </div>
+      
       <div className="mx-auto w-full gap-2 text-center md:hidden">
         <p className="text-sm font-semibold leading-6 text-gray-900">
           {mainBannerConfig.title}
@@ -61,7 +62,7 @@ const MainBanner = () => {
           <GithubIcon className="mr-1 h-4 w-4" />
           {mainBannerConfig.button}
         </Link>
-      </div>
+      </div>*/}
     </div>
   );
 };

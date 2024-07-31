@@ -46,7 +46,7 @@ const PostCreateButton = () => {
         user_id: session?.user.id,
       };
 
-      const response = await CreatePost(post);
+      const response = await createPost(post);
 
       if (response && response.id) {
         toast.success(protectedPostConfig.successCreate);
