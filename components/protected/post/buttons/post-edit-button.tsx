@@ -81,7 +81,27 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
       toast.error(protectedPostConfig.errorDelete);
     }
   }
-
+  async function publishMyPost() {
+    setShowLoadingAlert(true);
+    if (id && session?.user.id) {
+      const myPostData = {
+        id: id,
+        published: true,
+      };
+      const response = await PublishPost(myPostData);
+      if (response) {
+        setShowLoadingAlert(false);
+        toast.success(protectedPostConfig.successPostPublished);
+        router.refresh();
+      } else {
+        setShowLoadingAlert(false);
+        toast.error(protectedPostConfig.errorUpdate);
+      }
+    } else {
+      setShowLoadingAlert(false);
+      toast.error(protectedPostConfig.errorUpdate);
+    }
+  }
   return (
     <>
       <DropdownMenu>

@@ -19,7 +19,7 @@ const mainFooterConfig: FooterType = {
       title: "About",
       slug: "/about",
     },
-    {
+    /* {
       title: "Docs",
       slug: "/docs",
     },
@@ -27,6 +27,7 @@ const mainFooterConfig: FooterType = {
       title: "Changelogs",
       slug: "/changelogs",
     },
+    */
     {
       title: "Contact",
       slug: "/contact",
