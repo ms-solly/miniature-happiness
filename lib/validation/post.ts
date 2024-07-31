@@ -70,8 +70,8 @@ export const postUpdateSchema = z.object({
 
 export const postPublishSchema = z.object({
   id: z.string(),
-  title: z.string(),
-  content: z.string(),
+  title: z.string().optional(),
+  content: z.string().optional(),
   published: z.boolean(),
-  user_id: z.string(),
+  user_id: z.string().optional(),
 });

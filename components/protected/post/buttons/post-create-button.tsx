@@ -22,13 +22,15 @@ const PostCreateButton = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [session, setSession] = useState<Session | null>(null);
 
-  // Check authentication and session state
+  // Check authentication and bookmark states
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
 
@@ -41,12 +43,10 @@ const PostCreateButton = () => {
     if (session?.user.id) {
       const post = {
         title: protectedPostConfig.untitled,
-        content: "", // Provide default content or leave it empty
-        published: false, // Default published state
         user_id: session?.user.id,
       };
 
-      const response = await CreatePost(post);  // Correct function call
+      const response = await CreatePost(post);
 
       if (response && response.id) {
         toast.success(protectedPostConfig.successCreate);
