@@ -1,6 +1,6 @@
 "use client";
 
-import { CreatePost } from "@/actions/post/create-post";  // Correct import
+import { CreatePost } from "@/actions/post/create-post";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -41,6 +41,8 @@ const PostCreateButton = () => {
     if (session?.user.id) {
       const post = {
         title: protectedPostConfig.untitled,
+        content: "", // Provide default content or leave it empty
+        published: false, // Default published state
         user_id: session?.user.id,
       };
 

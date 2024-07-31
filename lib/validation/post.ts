@@ -66,6 +66,9 @@ export const postUpdateSchema = z.object({
 });
 
 export const postPublishSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
+  title: z.string().nonempty(),
+  content: z.string().nonempty(),
   published: z.boolean(),
+  user_id: z.string().nonempty(),
 });
