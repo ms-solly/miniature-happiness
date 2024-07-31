@@ -12,7 +12,7 @@ export async function CreatePost(context: z.infer<typeof postCreateSchema>) {
   try {
     const post = postCreateSchema.parse(context);
     const { data, error } = await supabase
-      .from("drafts")
+      .from("posts")
       .insert({
         title: post.title,
         author_id: post.user_id,
