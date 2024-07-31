@@ -1,6 +1,6 @@
 "use client";
 
-import { CreatePost } from "@/actions/post/create-post";
+import { PublishPost } from "@/actions/post/create-post";
 import {
   AlertDialog,
   AlertDialogContent,
