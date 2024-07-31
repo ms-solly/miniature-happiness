@@ -1,4 +1,4 @@
-import z from "zod";
+import * as z from "zod";
 
 export const postDeleteSchema = z.object({
   id: z.string(),
@@ -10,7 +10,10 @@ export const postSlugSchema = z.object({
 });
 
 export const postCreateSchema = z.object({
+  id: z.string().optional(),  // Optional for new posts
   title: z.string(),
+  content: z.string().optional(),  // Content can be optional for creation
+  published: z.boolean().default(false),  // Default to false for new posts
   user_id: z.string(),
 });
 

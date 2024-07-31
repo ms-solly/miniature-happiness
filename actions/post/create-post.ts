@@ -3,22 +3,23 @@
 import * as z from "zod";
 import { cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import { postPublishSchema } from "@/lib/validation/post";
+import { postCreateSchema, postPublishSchema } from "@/lib/validation/post";
 
-export async function CreatePost(context: z.infer<typeof postPublishSchema>) {
+export async function CreatePost(context: z.infer<typeof postCreateSchema>) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   try {
-    const post = postPublishSchema.parse(context);
+    const post = postCreateSchema.parse(context);
 
     const { data, error } = await supabase
       .from("posts")
       .insert({
         title: post.title,
-        content: post.content,
+        content: post.content ?? "",  // Provide default content if undefined
         published: post.published,
         user_id: post.user_id,
       })
+      .select()
       .single();
 
     if (error) {
