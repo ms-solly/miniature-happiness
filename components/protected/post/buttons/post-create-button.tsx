@@ -22,7 +22,7 @@ const PostCreateButton = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [session, setSession] = useState<Session | null>(null);
 
-  // Check authentitication and bookmark states
+  // Check authentication and bookmark states
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -48,7 +48,7 @@ const PostCreateButton = () => {
 
       const response = await CreatePost(post);
 
-      if (response) {
+      if (response && response.id) {
         toast.success(protectedPostConfig.successCreate);
         // This forces a cache invalidation.
         router.refresh();

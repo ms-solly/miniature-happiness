@@ -18,7 +18,7 @@ export async function CreatePost(context: z.infer<typeof postCreateSchema>) {
         author_id: post.user_id,
       })
       .select()
-      
+      .single();
 
     if (error) {
       console.log(error);
